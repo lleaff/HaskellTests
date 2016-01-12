@@ -3,7 +3,7 @@
 # https://github.com/bitemyapp/learnhaskell/blob/master/install.md
 
 sudo apt-get update
-sudo apt-get install python-software-properties # v12.04 and below
+#sudo apt-get install python-software-properties # v12.04 and below
 sudo apt-get install software-properties-common # v12.10 and above
 sudo add-apt-repository -y ppa:hvr/ghc
 sudo apt-get update
