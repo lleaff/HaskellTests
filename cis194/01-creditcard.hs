@@ -7,10 +7,16 @@ import Prelude hiding (replicate, (/))
 (/) :: Integer -> Integer -> Integer
 x / y = x `div` y
 
+dropLastDigit :: Integer -> Integer
+dropLastDigit = (/10)
+
+lastDigit :: Integer -> Integer
+lastDigit = (`mod` 10)
+
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev n
   | n == 0    = []
-  | otherwise = (n `mod` 10) : toDigitsRev (n / 10)
+  | otherwise = lastDigit n : [dropLastDigit n]
 
 
 toDigits :: Integer -> [Integer]
