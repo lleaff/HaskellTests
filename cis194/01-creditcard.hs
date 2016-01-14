@@ -16,7 +16,7 @@ lastDigit = (`mod` 10)
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev n
   | n == 0    = []
-  | otherwise = lastDigit n : [dropLastDigit n]
+  | otherwise = lastDigit n : toDigitsRev (dropLastDigit n)
 
 
 toDigits :: Integer -> [Integer]
@@ -53,3 +53,8 @@ flatMap f ls = flatten (map f ls)
 
 sumDigits :: [Integer] -> Integer
 sumDigits = sum . flatMap toDigits
+
+-- Exercise 4
+
+validate :: Integer -> Bool
+validate = (0 ==) . (`mod` 10) . sumDigits . doubleEveryOther . toDigits
