@@ -1,6 +1,6 @@
 module Creditcard where
 
-import Prelude hiding (replicate, (/))
+import Prelude hiding (replicate, (/), sum)
 
 -- Exercise 1
 
@@ -36,3 +36,20 @@ mapAtEvery fill n f =  zipWith ($) (repeatEvery fill n f)
 
 doubleEveryOther :: [Integer] -> [Integer]
 doubleEveryOther = reverse . mapAtEvery id 2 (2*) . reverse
+
+-- Exercise 3
+
+sum :: [Integer] -> Integer
+sum = foldl (+) 0
+
+flatten :: [[a]] -> [a]
+flatten ([x]:ys) = x : flatten  ys
+flatten ((z:ys):ws) = z : flatten [ys] ++ flatten ws
+flatten ([]:ys) = flatten ys
+flatten [] = []
+
+flatMap :: (a -> [a]) -> [a] -> [a]
+flatMap f ls = flatten (map f ls)
+
+sumDigits :: [Integer] -> Integer
+sumDigits = sum . flatMap toDigits
