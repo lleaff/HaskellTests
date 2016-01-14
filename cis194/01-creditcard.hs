@@ -26,8 +26,7 @@ repeatEvery :: a -> Int -> a -> [a]
 repeatEvery fill n x = replicate (n - 1) fill ++ [x] ++ repeatEvery fill n x
  
 mapAtEvery :: (a -> b) -> Int -> (a -> b) -> [a] -> [b]
-mapAtEvery fill n f ls =  zipWith ($) fs ls
-  where fs = repeatEvery fill n f
+mapAtEvery fill n f =  zipWith ($) (repeatEvery fill n f)
 
 doubleEveryOther :: [Integer] -> [Integer]
 doubleEveryOther = reverse . mapAtEvery id 2 (2*) . reverse
