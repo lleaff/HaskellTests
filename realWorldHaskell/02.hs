@@ -7,7 +7,7 @@ False ||| b = b
 infixr 2 |||
 
 (|>) :: a -> (a -> b) -> b
-a |> f = f a
+(|>) = flip ($)
 
 mylength :: [a] -> Integer
 mylength (_:xs) = 1 + mylength xs
