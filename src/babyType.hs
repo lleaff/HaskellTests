@@ -44,17 +44,22 @@ kill snail = DeadSnail (getName snail)
 passThrough :: (a -> b) -> (b -> b -> c) -> a -> a -> c
 passThrough f f' x y = f' (f x) (f y)
 
+(.<) :: (c -> d) -> (a -> b -> c) -> (a -> b -> d)
+fa .< fb = \x y -> fa (fb x y)
+
+------------------------------------------------------------
+
 middle :: Integral a => a -> a -> a
 middle x = (+ x) . (`div` 2) . (-x +)
 
 middleChar :: Char -> Char -> Char
-middleChar h = chr . passThrough ord middle h
+middleChar  = chr .< passThrough ord middle
 
 pair :: a -> a -> [a]
 pair x y = [x, y]
 
 weave :: [a] -> [a] -> [a]
-weave xs ys = concat (zipWith pair xs ys)
+weave = concat .< zipWith pair
 
 compress :: [a] -> [a]
 compress [] = []
