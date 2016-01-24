@@ -41,11 +41,14 @@ kill snail = DeadSnail (getName snail)
 
 ------------------------------------------------------------
 
+passThrough :: (a -> b) -> (b -> b -> c) -> a -> a -> c
+passThrough f f' x y = f' (f x) (f y)
+
 middle :: Integral a => a -> a -> a
 middle x = (+ x) . (`div` 2) . (-x +)
 
 middleChar :: Char -> Char -> Char
-middleChar h = chr . middle (ord h) . ord
+middleChar h = chr . passThrough ord middle h
 
 pair :: a -> a -> [a]
 pair x y = [x, y]
