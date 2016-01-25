@@ -12,3 +12,8 @@ insert msg@(LogMessage _ timeSp _) (Node mTreeL msg'@(LogMessage _ timeSp' _) mT
 
 build :: [LogMessage] -> MessageTree
 build = foldr insert Leaf
+
+inOrder :: MessageTree -> [LogMessage]
+inOrder Leaf = []
+inOrder (Node Leaf msg mTreeR) = msg : inOrder mTreeR
+inOrder (Node mTreeL msg mTreeR) = inOrder mTreeL ++ (msg : inOrder mTreeR)
