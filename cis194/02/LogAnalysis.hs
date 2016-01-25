@@ -2,49 +2,27 @@
 module LogAnalysis where
 
 import Log
-import Data.Maybe
-
-deepCons :: a -> [[a]] -> [[a]]
-y `deepCons` [] = [[y]]
-y `deepCons` (x:xs) = (y:x):xs
-
-explode :: String -> Char -> [String]
-explode [] _ = []
-explode (c:cs) d | c == d    = "" : explode cs d
-                 | otherwise = c `deepCons` explode cs d
-
-isUInt :: String -> Bool
-isUInt = all (`elem` ['0'..'9'])
-
-digitToInt :: Char -> Int
-digitToInt c = fromJust $ lookup c (zip ['0'..'9'] [0..9])
-
-toUInt :: String -> Int
-toUInt cs | isUInt cs = foldl (\p x -> (10*p) + digitToInt x) 0 cs
-          | otherwise = -1
-
-hasValidMessageStart :: [String] -> Bool
-hasValidMessageStart [] = False
-hasValidMessageStart [_] = False
-hasValidMessageStart (i:cs:css) | i == "I" ||
-                                 i == "W" = isUInt cs
-                               | i == "E" = isUInt cs && case css of
-                                                              [] -> False
-                                                              (cs':_) -> isUInt cs'
-                               | otherwise = False
-
-parseMessage :: String -> LogMessage
-parseMessage str' | hasValidMessageStart css =
-                      let (mt, ts:str) =
-                            case i of
-                            "I" -> (Info, ss)
-                            "W" ->  (Warning, ss)
-                            "E" ->  (Error (toUInt s), ss')
-                            _ -> error "parseMessage: Bad message start"
-                        in LogMessage mt (toUInt ts) (concat str)
-                  | otherwise = Unknown str'
-             where css@(i:ss@(s:ss')) = explode str' ' '
+import ParseLogs
+import MessageTree
 
 
-parse :: String -> [LogMessage]
-parse = map parseMessage . lines
+
+
+
+main = build $ parse testString
+
+
+testString = "I 5053 pci_id: con ing!\n\
+\I 4681 ehci 0xf43d000:15: regista14: [0xbffff 0xfed nosabled 00-02] Zonseres: brips byted nored)\n\
+\W 3654 e8] PGTT ASF! 00f00000003.2: 0x000 - 0000: 00009dbfffec00000: Pround/f1743colled\n\
+\I 4076 verse.'\n\
+\I 4764 He trusts to you to set them free,\n\
+\I 858 your pocket?' he went on, turning to Alice.\n\
+\I 898 would be offended again.\n\
+\I 3753 pci 0x18fff steresocared, overne: 0000 (le wailan0: ressio0/derveld fory: alinpu-all)\n\
+\I 790 those long words, and, what's more, I don't believe you do either!' And\n\
+\I 3899 hastily.\n\
+\I 2194 little creature, and held out its arms and legs in all directions, 'just\n\
+\I 1447 she was terribly frightened all the time at the thought that it might be\n\
+\I 1147 began ordering people about like that!'\n\
+\I 3466 pci_hcd beed VRAM=2)"
